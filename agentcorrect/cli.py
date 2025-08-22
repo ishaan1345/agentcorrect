@@ -16,9 +16,9 @@ try:
     from .ingest import stream_jsonl, validate_input
     from .normalize import to_canonical
     from .compliance import allowlist_and_redact, Redactor
-    from .detectors_ultimate import AgentCorrectUltimate
+    from .detectors_v4_fixed import AgentCorrectV4 as AgentCorrectUltimate
     from .coverage import CoverageTracker
-    from .output import print_human_summary, write_artifacts
+    from .output_v4 import print_human_summary, write_artifacts
     from .rego import spec_from_findings, emit_rego_bundle
     from .util import Timer
 except ImportError:
@@ -27,9 +27,9 @@ except ImportError:
     from ingest import stream_jsonl, validate_input
     from normalize import to_canonical
     from compliance import allowlist_and_redact, Redactor
-    from detectors_ultimate import AgentCorrectUltimate
+    from detectors_v4_fixed import AgentCorrectV4 as AgentCorrectUltimate
     from coverage import CoverageTracker
-    from output import print_human_summary, write_artifacts
+    from output_v4 import print_human_summary, write_artifacts
     from rego import spec_from_findings, emit_rego_bundle
     from util import Timer
 

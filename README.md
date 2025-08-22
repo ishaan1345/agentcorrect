@@ -1,75 +1,143 @@
-# AgentCorrect 🛡️
+# AgentCorrect
 
-**95% Detection Rate** - Stop AI agents from double-charging customers and destroying databases.
+Stop your AI agents from destroying production.
 
-## What It Catches
+## What This Does
 
-### ✅ Payment Issues (95%+ detection)
-- Missing idempotency keys for 25+ payment providers
-- Invalid idempotency keys (empty, "test", timestamps)
-- Subdomain spoofing (api.stripe.com.evil.com)
-- GraphQL payment mutations
-- Webhook-triggered payments
-- Same key used for different amounts
+AgentCorrect scans AI agent traces and blocks deployments when it finds:
+- Payment API calls missing idempotency keys (duplicate charges)
+- SQL queries that would delete/modify all records
+- Infrastructure commands that would wipe caches or databases
 
-### ✅ SQL Disasters (100% detection)
-- DELETE without WHERE
-- UPDATE without WHERE
-- DROP TABLE/DATABASE
-- TRUNCATE operations
-- Tautologies (WHERE 1=1, WHERE id=id)
-- SQL comment bypasses
+Exit code 2 fails your CI/CD pipeline. That's it.
 
-### ✅ Infrastructure Nukes (100% detection)
-- MongoDB dropDatabase/drop operations
-- Redis FLUSHALL/FLUSHDB
-- S3 DeleteBucket
+## Who Needs This
 
-## Quick Start
+You need this if:
+- Your AI agents call payment APIs (Stripe, PayPal, Square, etc.)
+- Your AI agents execute SQL queries  
+- Your AI agents touch Redis, MongoDB, or cloud infrastructure
+- You've ever had an agent accidentally charge a customer twice
+- You've ever had an agent delete production data
 
-```bash
-pip install agentcorrect
-agentcorrect analyze trace.jsonl
-```
+You don't need this if:
+- Your agents are read-only
+- Your agents don't touch money or data
+- You manually review every agent action
 
 ## Installation
 
 ```bash
-git clone https://github.com/ishaan1345/agentcorrect
-cd agentcorrect
-pip install -e .
+pip install agentcorrect
 ```
 
 ## Usage
 
-Analyze agent traces:
 ```bash
-agentcorrect analyze traces.jsonl --out results/
+# Analyze agent trace
+agentcorrect analyze trace.jsonl
+
+# In CI/CD pipeline
+agentcorrect analyze trace.jsonl || exit 1
 ```
 
-Demo mode:
-```bash
-agentcorrect demo --scenario all
+## What It Catches
+
+### Payment Disasters
+- Stripe: Missing Idempotency-Key header → Prevents duplicate charges
+- PayPal: Missing PayPal-Request-Id → Prevents duplicate charges  
+- Square: Missing idempotency_key in body → Prevents duplicate charges
+- 25+ payment providers with their exact requirements
+
+### SQL Disasters  
+- `DELETE FROM users WHERE 1=1` → Blocked (tautology)
+- `DELETE FROM users` → Blocked (no WHERE clause)
+- `TRUNCATE TABLE orders` → Blocked (data loss)
+- `DROP TABLE customers` → Blocked (irreversible)
+
+### Infrastructure Disasters
+- Redis: `FLUSHALL` → Blocked (cache wipe)
+- MongoDB: `dropDatabase` → Blocked (database deletion)
+- S3: `DeleteBucket` → Blocked (storage deletion)
+
+## Real Example
+
+Your agent does this:
+```python
+# Agent tries to charge customer
+response = stripe.charges.create(amount=5000, currency="usd")
+# Network timeout, agent retries
+response = stripe.charges.create(amount=5000, currency="usd") 
+# Customer charged twice - $100 lost
 ```
 
-## Exit Codes
+AgentCorrect catches this:
+```
+Missing payment idempotency
+Provider: Stripe  
+Fix: Add header 'Idempotency-Key: <unique-order-id>'
+Exit code: 2 (Build Failed)
+```
 
-- 0: Clean (no issues or only warnings)
-- 2: SEV0 issues found (blocks CI/CD)
-- 4: Input error
-- 5: Policy compilation error
+## Trace Format
 
-## Supported Providers
+JSONL format - one JSON object per line:
 
-Stripe, PayPal, Square, Adyen, Braintree, Checkout.com, Razorpay, Mollie, Klarna, Afterpay, Mercado Pago, PayU, Paytm, Alipay, WeChat Pay, Coinbase, BitPay, Plaid, Dwolla, Wise, Authorize.net, 2Checkout, WorldPay, Paysafe, BluePay
+```jsonl
+{"role":"http","meta":{"http":{"method":"POST","url":"https://api.stripe.com/v1/charges","headers":{},"body":{"amount":1000}}}}
+{"role":"sql","meta":{"sql":{"query":"DELETE FROM users WHERE id = 123"}}}
+{"role":"redis","meta":{"redis":{"command":"GET user:123"}}}
+```
 
-## Performance
+## Why This Works
 
-- <100ms per trace
-- No network calls (fully offline)
-- Deterministic results
-- Memory efficient
+1. **Vendor-specific knowledge**: We know Stripe needs `Idempotency-Key` in headers, Square needs `idempotency_key` in body. This isn't guesswork.
+
+2. **AST parsing for SQL**: We parse SQL structurally, not with regex. No false positives.
+
+3. **Exit codes for CI/CD**: Non-zero exit fails the build. Standard CI/CD practice.
+
+## CI/CD Integration
+
+### GitHub Actions
+```yaml
+- name: Test Agent Safety
+  run: |
+    python run_agent.py > trace.jsonl
+    agentcorrect analyze trace.jsonl
+```
+
+### GitLab CI
+```yaml
+test-agent:
+  script:
+    - python run_agent.py > trace.jsonl
+    - agentcorrect analyze trace.jsonl
+```
+
+## Testing
+
+Run the verification suite:
+```bash
+python verify.py        # Test all detections
+python ship_tests.py    # 15 acceptance tests
+./quick_proof.sh       # 60-second proof
+```
+
+## Limitations
+
+- Only catches what we know about (95% of payment providers, common SQL patterns)
+- Requires trace data in JSONL format
+- Can't prevent disasters if you skip the CI/CD check
 
 ## License
 
 MIT
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+---
+
+Built for teams who learned the hard way that AI agents need guardrails.

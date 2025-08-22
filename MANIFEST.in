@@ -1,0 +1,32 @@
+include README.md
+include LICENSE
+include SPEC.md
+include pyproject.toml
+include requirements.txt
+
+# Include all fixture files
+recursive-include agentcorrect/fixtures *.jsonl
+
+# Include test fixtures
+recursive-include fixtures *.jsonl
+
+# Include verification scripts
+include verify.py
+include determinism_test.py
+include ship_tests.py
+include quick_proof.sh
+include quick_proof.ps1
+
+# Include GitHub workflows
+recursive-include .github *.yml
+
+# Include examples
+recursive-include examples *.py
+
+# Exclude development files
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude __pycache__
+global-exclude .git
+global-exclude .gitignore
+global-exclude *.egg-info
