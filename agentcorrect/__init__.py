@@ -9,6 +9,6 @@ __author__ = "AgentCorrect Team"
 __email__ = "support@agentcorrect.com"
 __license__ = "MIT"
 
-from .detectors_v4_fixed import AgentCorrectV4
+from .detectors import AgentCorrectV4
 
 __all__ = ["AgentCorrectV4", "__version__"]

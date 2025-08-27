@@ -20,6 +20,10 @@ class Colors:
 
 def run_agentcorrect(fixture_path):
     """Run agentcorrect on a fixture and return exit code and output."""
+    # Fix path - we're in tests/ but fixtures are in ../agentcorrect/fixtures/
+    if not str(fixture_path).startswith('/'):
+        fixture_path = f'../agentcorrect/{fixture_path}'
+    
     result = subprocess.run(
         ['python3', '-m', 'agentcorrect', 'analyze', str(fixture_path)],
         capture_output=True,
