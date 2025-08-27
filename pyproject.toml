@@ -33,10 +33,10 @@ dependencies = [
 requires-python = ">=3.8"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/agentcorrect"
-Documentation = "https://docs.agentcorrect.com"
-Repository = "https://github.com/yourusername/agentcorrect"
-Issues = "https://github.com/yourusername/agentcorrect/issues"
+Homepage = "https://agentcorrect.com"
+Documentation = "https://github.com/ishaan1345/agentcorrect#readme"
+Repository = "https://github.com/ishaan1345/agentcorrect"
+Issues = "https://github.com/ishaan1345/agentcorrect/issues"
 
 [project.scripts]
 agentcorrect = "agentcorrect.cli:main"

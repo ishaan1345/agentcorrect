@@ -102,6 +102,17 @@ def analyze_command(args):
         print(f"Error: {error_msg}", file=sys.stderr)
         return 4  # Input/schema error
     
+    # Count total traces first for progress display
+    total_traces = 0
+    if args.input != '-':
+        try:
+            with open(args.input, 'r') as f:
+                total_traces = sum(1 for line in f if line.strip())
+            print(f"Analyzing {total_traces:,} traces...")
+            print()
+        except:
+            pass  # Fall back to no trace count
+    
     # Compile scratch pattern
     try:
         scratch_regex = re.compile(args.scratch_table_pattern) if args.scratch_table_pattern else None
