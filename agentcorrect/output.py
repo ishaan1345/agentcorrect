@@ -18,7 +18,7 @@ def print_human_summary(findings: List[Dict], coverage: Dict[str, Any], total_ev
     sev1_findings = [f for f in findings if f.get("severity") == "SEV1"]
     
     if sev0_findings:
-        print("\n🚨 SEV0 - Critical Issues (CI/CD Blockers):")
+        print("\nSEV0 - Critical Issues (CI/CD Blockers):")
         print("-" * 50)
         
         # Group by type
@@ -29,16 +29,16 @@ def print_human_summary(findings: List[Dict], coverage: Dict[str, Any], total_ev
         
         for ftype, count in by_type.items():
             if ftype == "payment_no_idempotency":
-                print(f"❌ Missing payment idempotency — {count} operations")
+                print(f"Missing payment idempotency - {count} operations")
                 print("   Fix: Add idempotency keys to payment POST requests")
             elif ftype == "sql_unbounded_write":
-                print(f"❌ SQL unbounded writes — {count} queries")
+                print(f"SQL unbounded writes - {count} queries")
                 print("   Fix: Add WHERE clauses to DELETE/UPDATE queries")
             else:
-                print(f"❌ {ftype} — {count} issues")
+                print(f"{ftype} - {count} issues")
     
     if sev1_findings:
-        print("\n⚠️  SEV1 - Advisory Issues (Non-blocking):")
+        print("\nSEV1 - Advisory Issues (Non-blocking):")
         print("-" * 50)
         
         by_type = {}
@@ -47,10 +47,10 @@ def print_human_summary(findings: List[Dict], coverage: Dict[str, Any], total_ev
             by_type[ftype] = by_type.get(ftype, 0) + 1
         
         for ftype, count in by_type.items():
-            print(f"⚠️  {ftype} — {count} issues")
+            print(f"{ftype} - {count} issues")
     
     if not findings:
-        print("\n✅ No issues detected - trace is clean!")
+        print("\nNo issues detected - trace is clean!")
     
     # Coverage summary
     coverage_pct = coverage.get("coverage_percentage", 0)

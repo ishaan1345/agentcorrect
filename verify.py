@@ -36,9 +36,9 @@ def test_fixture(name, fixture_path, expected_exit, should_contain=None, should_
     
     # Check exit code
     if exit_code == expected_exit:
-        print(f"  {Colors.GREEN}✓{Colors.RESET} Exit code: {exit_code} (expected {expected_exit})")
+        print(f"  {Colors.GREEN}[PASS]{Colors.RESET} Exit code: {exit_code} (expected {expected_exit})")
     else:
-        print(f"  {Colors.RED}✗{Colors.RESET} Exit code: {exit_code} (expected {expected_exit})")
+        print(f"  {Colors.RED}[FAIL]{Colors.RESET} Exit code: {exit_code} (expected {expected_exit})")
         print(f"  Output: {stdout[:200]}")
         return False
     
@@ -46,18 +46,18 @@ def test_fixture(name, fixture_path, expected_exit, should_contain=None, should_
     if should_contain:
         for pattern in should_contain:
             if pattern in stdout:
-                print(f"  {Colors.GREEN}✓{Colors.RESET} Found: '{pattern}'")
+                print(f"  {Colors.GREEN}[OK]{Colors.RESET} Found: '{pattern}'")
             else:
-                print(f"  {Colors.RED}✗{Colors.RESET} Missing: '{pattern}'")
+                print(f"  {Colors.RED}[MISSING]{Colors.RESET} Missing: '{pattern}'")
                 return False
     
     # Check for false positives
     if should_not_contain:
         for pattern in should_not_contain:
             if pattern not in stdout:
-                print(f"  {Colors.GREEN}✓{Colors.RESET} Correctly absent: '{pattern}'")
+                print(f"  {Colors.GREEN}[OK]{Colors.RESET} Correctly absent: '{pattern}'")
             else:
-                print(f"  {Colors.RED}✗{Colors.RESET} False positive: '{pattern}'")
+                print(f"  {Colors.RED}[FALSE+]{Colors.RESET} False positive: '{pattern}'")
                 return False
     
     return True
@@ -135,7 +135,7 @@ def main():
     print(f"\n{Colors.BOLD}{'='*60}{Colors.RESET}")
     total = passed + failed
     if failed == 0:
-        print(f"{Colors.GREEN}{Colors.BOLD}✅ ALL TESTS PASSED: {passed}/{total}{Colors.RESET}")
+        print(f"{Colors.GREEN}{Colors.BOLD}ALL TESTS PASSED: {passed}/{total}{Colors.RESET}")
         print(f"\nThis proves:")
         print(f"  • Detections match vendor documentation (see SPEC.md)")
         print(f"  • Exit codes work for CI/CD (0=clean, 2=SEV0)")
@@ -143,7 +143,7 @@ def main():
         print(f"  • No false positives on clean traces")
         return 0
     else:
-        print(f"{Colors.RED}{Colors.BOLD}❌ TESTS FAILED: {failed}/{total} failed{Colors.RESET}")
+        print(f"{Colors.RED}{Colors.BOLD}TESTS FAILED: {failed}/{total} failed{Colors.RESET}")
         return 1
 
 if __name__ == "__main__":
