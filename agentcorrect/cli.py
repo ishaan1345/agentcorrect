@@ -18,9 +18,10 @@ try:
     from .compliance import allowlist_and_redact, Redactor
     from .detectors import AgentCorrectV4 as AgentCorrectUltimate
     from .coverage import CoverageTracker
-    from .output_v5 import print_human_summary, write_artifacts
+    from .output import print_human_summary, write_artifacts
     from .rego import spec_from_findings, emit_rego_bundle
     from .util import Timer
+    from .learning import CorrectionLearner, AutoCorrector, add_learning_commands
 except ImportError:
     # Direct imports for standalone usage
     __version__ = '1.0.0'
@@ -29,9 +30,10 @@ except ImportError:
     from compliance import allowlist_and_redact, Redactor
     from detectors import AgentCorrectV4 as AgentCorrectUltimate
     from coverage import CoverageTracker
-    from output_v5 import print_human_summary, write_artifacts
+    from output import print_human_summary, write_artifacts
     from rego import spec_from_findings, emit_rego_bundle
     from util import Timer
+    from learning import CorrectionLearner, AutoCorrector, add_learning_commands
 
 def parse_args():
     """Parse command line arguments."""
@@ -76,6 +78,9 @@ def parse_args():
                             help='Demo scenario to run')
     demo_parser.add_argument('--out', dest='output_dir', 
                             help='Output directory for demo artifacts')
+    
+    # Add learning commands
+    add_learning_commands(subparsers)
     
     return parser.parse_args()
 
@@ -325,6 +330,77 @@ def demo_command(args):
     
     return result
 
+def learn_command(args):
+    """Handle the learn command."""
+    learner = CorrectionLearner()
+    
+    # Read original and corrected traces
+    with open(args.original, 'r') as f:
+        original_trace = f.read()
+    
+    with open(args.corrected, 'r') as f:
+        corrected_trace = f.read()
+    
+    # Learn the correction
+    correction = learner.learn_from_trace_diff(
+        original_trace,
+        corrected_trace,
+        args.failure_type
+    )
+    
+    if correction:
+        print(f"\n✅ Successfully learned correction {correction.id}")
+        return 0
+    else:
+        print("⚠️  No difference found between traces", file=sys.stderr)
+        return 1
+
+def autocorrect_command(args):
+    """Handle the autocorrect command."""
+    learner = CorrectionLearner()
+    auto_corrector = AutoCorrector(learner)
+    
+    # Process the trace
+    corrected_path = auto_corrector.process_trace(args.input)
+    
+    # Move to output path if specified
+    if args.output:
+        import shutil
+        shutil.move(corrected_path, args.output)
+        print(f"\n✅ Corrected trace saved to: {args.output}")
+    else:
+        print(f"\n✅ Corrected trace saved to: {corrected_path}")
+    
+    return 0
+
+def stats_command(args):
+    """Handle the stats command."""
+    learner = CorrectionLearner()
+    
+    print("\n📊 AGENTCORRECT LEARNING STATISTICS")
+    print(f"   Total corrections learned: {len(learner.corrections)}")
+    
+    if learner.corrections:
+        print("\n   Corrections by type:")
+        by_type = {}
+        for corr in learner.corrections.values():
+            by_type[corr.failure_type] = by_type.get(corr.failure_type, 0) + 1
+        
+        for failure_type, count in sorted(by_type.items()):
+            print(f"     {failure_type}: {count}")
+        
+        print("\n   Most used corrections:")
+        sorted_corr = sorted(learner.corrections.values(), 
+                           key=lambda x: x.applied_count, 
+                           reverse=True)[:5]
+        
+        for corr in sorted_corr:
+            print(f"     {corr.id}: {corr.applied_count} uses, "
+                  f"{corr.success_count}/{corr.applied_count} successful "
+                  f"({corr.calculate_confidence():.0%} confidence)")
+    
+    return 0
+
 def main():
     """Main entry point."""
     args = parse_args()
@@ -337,6 +413,12 @@ def main():
         return analyze_command(args)
     elif args.command == 'demo':
         return demo_command(args)
+    elif args.command == 'learn':
+        return learn_command(args)
+    elif args.command == 'autocorrect':
+        return autocorrect_command(args)
+    elif args.command == 'stats':
+        return stats_command(args)
     else:
         print(f"Error: Unknown command: {args.command}", file=sys.stderr)
         return 4

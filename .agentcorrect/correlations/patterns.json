@@ -1,0 +1,32 @@
+{
+  "pattern_1757026323_5f91256f": {
+    "pattern_id": "pattern_1757026323_5f91256f",
+    "failure_signature": "603fb32d80ecd391",
+    "correction_template": {
+      "additions": {},
+      "modifications": {
+        "headers": {
+          "from": {
+            "Content-Type": "application/json"
+          },
+          "to": {
+            "Content-Type": "application/json",
+            "X-API-Key": "secret_key_123"
+          }
+        }
+      },
+      "removals": []
+    },
+    "context_requirements": {
+      "domain": "api.example.com",
+      "path": "/process",
+      "method": "POST"
+    },
+    "confidence": 0.7,
+    "application_count": 0,
+    "success_count": 0,
+    "example_chains": [
+      "chain_1757026323_5187f5be"
+    ]
+  }
+}
