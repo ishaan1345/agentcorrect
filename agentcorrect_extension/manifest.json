@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "AgentCorrect - AI Rework Prevention",
+  "version": "1.0.0",
+  "description": "Captures corrections to AI agent outputs to prevent future rework",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  
+  "host_permissions": [
+    "https://*.zendesk.com/*",
+    "https://*.intercom.io/*",
+    "https://*.salesforce.com/*",
+    "https://*.servicenow.com/*",
+    "https://*.hubspot.com/*",
+    "https://*.freshdesk.com/*",
+    "https://*.slack.com/*",
+    "http://localhost:8888/*"
+  ],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.zendesk.com/*",
+        "https://*.intercom.io/*",
+        "https://*.salesforce.com/*",
+        "https://*.servicenow.com/*",
+        "https://*.hubspot.com/*",
+        "https://*.freshdesk.com/*",
+        "https://*.slack.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgentCorrect - Zero Rework for AI Agents</title>
-    <meta name="description" content="AgentCorrect shadows your operators, learns from their corrections, and ensures they never fix the same mistake twice. Built for agent builders and operators who are tired of repetitive fixes.">
+    <title>AgentCorrect - Zero Rework. Operators Never Fix The Same Thing Twice.</title>
+    <meta name="description" content="AgentCorrect shadows your operators, learns what they fix, and ensures they never have to fix the same thing twice. Stop the endless cycle of manual corrections.">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         
         * {
             margin: 0;
@@ -16,43 +16,50 @@
         }
         
         :root {
-            --primary: #0066ff;
-            --dark: #0a0a0a;
-            --light: #ffffff;
-            --gray: #666;
-            --light-gray: #f5f5f5;
-            --shadow: rgba(0, 102, 255, 0.1);
-            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --black: #000000;
+            --white: #ffffff;
+            --gray-50: #fafafa;
+            --gray-100: #f4f4f5;
+            --gray-200: #e4e4e7;
+            --gray-300: #d4d4d8;
+            --gray-400: #a1a1aa;
+            --gray-500: #71717a;
+            --gray-600: #52525b;
+            --gray-700: #3f3f46;
+            --gray-800: #27272a;
+            --gray-900: #18181b;
+            --blue: #0066cc;
+            --green: #00aa00;
+            --red: #cc0000;
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--light);
-            color: var(--dark);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--white);
+            color: var(--black);
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
         
         /* Header */
         header {
             position: fixed;
             top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200);
             z-index: 1000;
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            padding: 16px 0;
         }
         
         nav {
@@ -62,775 +69,679 @@
         }
         
         .logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
         
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 32px;
             align-items: center;
         }
         
         .nav-links a {
-            color: var(--gray);
+            color: var(--gray-600);
             text-decoration: none;
+            font-size: 15px;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: color 0.2s;
         }
         
         .nav-links a:hover {
-            color: var(--primary);
+            color: var(--black);
         }
         
-        .get-started-btn {
-            background: var(--primary);
-            color: var(--light);
-            padding: 10px 20px;
+        .nav-cta {
+            background: var(--black);
+            color: var(--white);
+            padding: 8px 16px;
             border-radius: 8px;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-size: 15px;
+            font-weight: 500;
+            transition: opacity 0.2s;
         }
         
-        .get-started-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px var(--shadow);
+        .nav-cta:hover {
+            opacity: 0.8;
         }
         
-        /* Hero Section */
+        /* Hero */
         .hero {
-            padding: 140px 0 80px;
-            text-align: center;
-            position: relative;
+            padding: 160px 0 80px;
+            background: linear-gradient(180deg, var(--white) 0%, var(--gray-50) 100%);
         }
         
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 200%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
-            z-index: -1;
-        }
-        
-        .badge {
+        .hero-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: var(--light);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 14px;
+            background: var(--gray-100);
+            color: var(--gray-700);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 30px;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            letter-spacing: 0.02em;
+            margin-bottom: 24px;
+            text-transform: uppercase;
         }
         
         h1 {
-            font-size: 72px;
+            font-size: 80px;
             font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 30px;
-            background: linear-gradient(135deg, #0a0a0a 0%, #333 100%);
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            margin-bottom: 32px;
+            max-width: 1000px;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--black) 0%, var(--gray-600) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .hero-subtitle {
-            font-size: 24px;
-            color: var(--gray);
-            margin-bottom: 50px;
-            font-weight: 300;
+            font-size: 22px;
+            color: var(--gray-600);
             max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 48px;
+            line-height: 1.5;
         }
         
-        /* Demo Section */
-        .demo-section {
-            padding: 80px 0;
-            background: var(--light-gray);
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: var(--black);
+            color: var(--white);
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-secondary {
+            background: var(--white);
+            color: var(--black);
+            padding: 14px 28px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: border-color 0.2s;
+            display: inline-block;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--gray-400);
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 100px 0;
+            background: var(--white);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
         }
         
         .section-title {
             font-size: 48px;
             font-weight: 800;
-            text-align: center;
-            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
         }
         
         .section-subtitle {
             font-size: 20px;
-            color: var(--gray);
-            text-align: center;
-            margin-bottom: 60px;
+            color: var(--gray-600);
         }
         
-        .demo-container {
-            background: var(--light);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        .problem-visual {
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 48px;
+            margin-bottom: 32px;
         }
         
-        .demo-header {
-            background: var(--dark);
-            color: var(--light);
-            padding: 20px 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .window-controls {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .window-control {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        
-        .window-control.red { background: #ff5f56; }
-        .window-control.yellow { background: #ffbd2e; }
-        .window-control.green { background: #27c93f; }
-        
-        .demo-title {
-            flex: 1;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .demo-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 500px;
-        }
-        
-        .before-panel, .after-panel {
-            padding: 40px;
-            position: relative;
-        }
-        
-        .before-panel {
-            background: #fff5f5;
-            border-right: 1px solid #e5e5e5;
-        }
-        
-        .after-panel {
-            background: #f0fff4;
-        }
-        
-        .panel-label {
+        .day-label {
             font-size: 14px;
             font-weight: 700;
+            color: var(--gray-500);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
         }
         
-        .before-panel .panel-label {
-            color: #dc2626;
-        }
-        
-        .after-panel .panel-label {
-            color: #059669;
+        .workflow {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 24px;
         }
         
         .workflow-step {
-            background: var(--light);
+            flex: 1;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            animation: slideIn 0.5s ease forwards;
-            opacity: 0;
-        }
-        
-        .workflow-step:nth-child(2) { animation-delay: 0.1s; }
-        .workflow-step:nth-child(3) { animation-delay: 0.2s; }
-        .workflow-step:nth-child(4) { animation-delay: 0.3s; }
-        .workflow-step:nth-child(5) { animation-delay: 0.4s; }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            padding: 24px;
+            text-align: center;
         }
         
         .step-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
+            font-size: 32px;
+            margin-bottom: 12px;
         }
-        
-        .agent-icon { background: #e0e7ff; color: #4f46e5; }
-        .operator-icon { background: #fee2e2; color: #dc2626; }
-        .learn-icon { background: #f3e8ff; color: #9333ea; }
-        .auto-icon { background: #d1fae5; color: #059669; }
         
         .step-title {
             font-weight: 600;
-            font-size: 16px;
+            margin-bottom: 8px;
         }
         
-        .step-description {
-            color: var(--gray);
+        .step-desc {
             font-size: 14px;
-            line-height: 1.5;
+            color: var(--gray-600);
         }
         
-        .code-example {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 13px;
-            margin-top: 10px;
+        .arrow {
+            color: var(--gray-400);
+            font-size: 24px;
+        }
+        
+        .highlight-bad {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+        
+        .highlight-good {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+        
+        /* Stats */
+        .stats {
+            padding: 80px 0;
+            background: var(--gray-50);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+        
+        .stat-card {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 16px;
+            color: var(--gray-600);
+        }
+        
+        /* How it works */
+        .how {
+            padding: 100px 0;
+            background: var(--white);
+        }
+        
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+        
+        .how-card {
+            text-align: center;
+        }
+        
+        .how-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .how-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .how-desc {
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+        
+        /* Code Example */
+        .code-section {
+            padding: 100px 0;
+            background: var(--gray-50);
+        }
+        
+        .code-container {
+            background: var(--black);
+            border-radius: 16px;
+            padding: 32px;
             overflow-x: auto;
         }
         
-        .code-comment { color: #6a9955; }
-        .code-key { color: #9cdcfe; }
-        .code-value { color: #ce9178; }
-        .code-added { color: #4ec9b0; }
-        
-        /* How It Works */
-        .how-it-works {
-            padding: 100px 0;
+        .code {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--gray-300);
         }
         
-        .steps-grid {
+        .code-comment {
+            color: var(--gray-600);
+        }
+        
+        .code-keyword {
+            color: #60a5fa;
+        }
+        
+        .code-string {
+            color: #86efac;
+        }
+        
+        .code-function {
+            color: #fbbf24;
+        }
+        
+        /* Pricing */
+        .pricing {
+            padding: 100px 0;
+            background: var(--white);
+        }
+        
+        .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-top: 60px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 64px;
         }
         
-        .step-card {
-            text-align: center;
-            padding: 40px 30px;
-            border-radius: 20px;
-            background: var(--light);
-            border: 1px solid #e5e5e5;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .step-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-        
-        .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        .step-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient);
-            color: var(--light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 auto 20px;
-        }
-        
-        .step-card h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-        
-        .step-card p {
-            color: var(--gray);
-            line-height: 1.6;
-        }
-        
-        /* Value Props */
-        .value-props {
-            padding: 100px 0;
-            background: var(--light-gray);
-        }
-        
-        .props-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 60px;
-            margin-top: 60px;
-        }
-        
-        .prop-card {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .prop-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--light);
-            font-size: 28px;
-            flex-shrink: 0;
-        }
-        
-        .prop-content h3 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .prop-content p {
-            color: var(--gray);
-            line-height: 1.6;
-        }
-        
-        /* Integration */
-        .integration {
-            padding: 100px 0;
-            text-align: center;
-        }
-        
-        .code-block {
-            background: #1e1e1e;
-            color: #d4d4d4;
+        .pricing-card {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
             padding: 40px;
-            border-radius: 20px;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 16px;
-            margin: 60px auto;
-            max-width: 800px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            text-align: left;
-        }
-        
-        .framework-badges {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 40px;
-        }
-        
-        .framework-badge {
-            background: var(--light);
-            border: 1px solid #e5e5e5;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            color: var(--gray);
-            transition: all 0.3s ease;
-        }
-        
-        .framework-badge:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            transform: translateY(-2px);
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 100px 0;
-            background: var(--gradient);
-            color: var(--light);
             text-align: center;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .cta-section h2 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            font-weight: 800;
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
         
-        .cta-section p {
+        .pricing-card.featured {
+            border-color: var(--black);
+            transform: scale(1.05);
+        }
+        
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .pricing-tier {
             font-size: 20px;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .cta-primary {
-            background: var(--light);
-            color: var(--dark);
-            padding: 15px 40px;
-            border-radius: 10px;
-            text-decoration: none;
             font-weight: 700;
-            font-size: 18px;
-            transition: all 0.3s ease;
+            margin-bottom: 8px;
         }
         
-        .cta-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        .pricing-price {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
         }
         
-        .cta-secondary {
-            background: transparent;
-            color: var(--light);
-            padding: 15px 40px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 18px;
-            border: 2px solid var(--light);
-            transition: all 0.3s ease;
+        .pricing-period {
+            color: var(--gray-600);
+            margin-bottom: 32px;
         }
         
-        .cta-secondary:hover {
-            background: var(--light);
-            color: var(--dark);
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+        
+        .pricing-features li {
+            padding: 8px 0;
+            color: var(--gray-700);
         }
         
         /* Footer */
         footer {
-            padding: 60px 0;
-            background: var(--dark);
-            color: var(--light);
+            padding: 48px 0;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
         }
         
         .footer-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 40px;
-        }
-        
-        .footer-logo {
-            font-size: 20px;
-            font-weight: 800;
         }
         
         .footer-links {
             display: flex;
-            gap: 30px;
+            gap: 32px;
         }
         
         .footer-links a {
-            color: var(--light);
+            color: var(--gray-600);
             text-decoration: none;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
+            font-size: 14px;
+            transition: color 0.2s;
         }
         
         .footer-links a:hover {
-            opacity: 1;
+            color: var(--black);
         }
         
         /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 48px; }
-            .hero-subtitle { font-size: 18px; }
-            .section-title { font-size: 36px; }
-            .demo-content { grid-template-columns: 1fr; }
-            .props-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
+            h1 {
+                font-size: 48px;
+            }
+            
+            .hero-subtitle {
+                font-size: 18px;
+            }
+            
+            .section-title {
+                font-size: 36px;
+            }
+            
+            .workflow {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+            
+            .how-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            
+            .nav-links {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <header id="header">
-        <div class="container">
-            <nav>
-                <div class="logo">AgentCorrect</div>
-                <div class="nav-links">
-                    <a href="#how-it-works">How It Works</a>
-                    <a href="#demo">Demo</a>
-                    <a href="#integration">Integration</a>
-                    <a href="https://github.com/ishaan1345/agentcorrect">GitHub</a>
-                    <a href="#get-started" class="get-started-btn">Get Started</a>
-                </div>
-            </nav>
-        </div>
+    <header>
+        <nav class="container">
+            <div class="logo">AgentCorrect</div>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#pricing">Pricing</a>
+                <a href="https://github.com/ishaan1345/agentcorrect">GitHub</a>
+                <a href="#" class="nav-cta">Get Started</a>
+            </div>
+        </nav>
     </header>
     
     <section class="hero">
         <div class="container">
-            <div class="badge">Zero Rework for AI Agents</div>
-            <h1>Your operators fix the same<br>mistakes every day</h1>
-            <p class="hero-subtitle">AgentCorrect shadows them, learns what they fix, and ensures they never have to fix the same thing twice. Built for teams tired of repetitive manual corrections.</p>
+            <div class="hero-badge">Fix Once. Never Again.</div>
+            <h1>Your operators fix<br>the <span class="gradient-text">same mistakes</span><br>every single day</h1>
+            <p class="hero-subtitle">
+                AgentCorrect shadows your operators, learns what they correct, 
+                and ensures they never have to fix the same thing twice. 
+                Zero rework. Guaranteed.
+            </p>
+            <div class="hero-cta">
+                <a href="#" class="btn-primary">Start Free Trial</a>
+                <a href="#demo" class="btn-secondary">Watch 2-min Demo</a>
+            </div>
         </div>
     </section>
     
-    <section class="demo-section" id="demo">
+    <section class="problem" id="problem">
         <div class="container">
-            <h2 class="section-title">See the problem (and solution)</h2>
-            <p class="section-subtitle">This happens 100+ times per day at every company with AI agents</p>
+            <div class="section-header">
+                <h2 class="section-title">The painful reality</h2>
+                <p class="section-subtitle">This is happening in your company right now</p>
+            </div>
             
-            <div class="demo-container">
-                <div class="demo-header">
-                    <div class="window-controls">
-                        <div class="window-control red"></div>
-                        <div class="window-control yellow"></div>
-                        <div class="window-control green"></div>
+            <div class="problem-visual">
+                <div class="day-label">Monday Morning</div>
+                <div class="workflow">
+                    <div class="workflow-step">
+                        <div class="step-icon">🤖</div>
+                        <div class="step-title">AI Agent</div>
+                        <div class="step-desc">Forgets CA tax</div>
                     </div>
-                    <div class="demo-title">Live Agent Workflow Comparison</div>
+                    <div class="arrow">→</div>
+                    <div class="workflow-step highlight-bad">
+                        <div class="step-icon">😤</div>
+                        <div class="step-title">Operator</div>
+                        <div class="step-desc">Manually adds 9.25%</div>
+                    </div>
                 </div>
                 
-                <div class="demo-content">
-                    <div class="before-panel">
-                        <div class="panel-label">❌ Without AgentCorrect (Today)</div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-header">
-                                <div class="step-icon agent-icon">AI</div>
-                                <div class="step-title">Agent processes invoice</div>
-                            </div>
-                            <div class="step-description">California customer, $100 invoice</div>
-                            <div class="code-example">
-                                <span class="code-comment">// Missing CA tax AGAIN</span><br>
-                                {<span class="code-key">"amount"</span>: <span class="code-value">100</span>, <span class="code-key">"state"</span>: <span class="code-value">"CA"</span>}
-                            </div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-header">
-                                <div class="step-icon operator-icon">👤</div>
-                                <div class="step-title">Operator fixes it (10th time today)</div>
-                            </div>
-                            <div class="step-description">Manually adds 9.25% CA tax</div>
-                            <div class="code-example">
-                                <span class="code-comment">// Fixed manually</span><br>
-                                {<span class="code-key">"amount"</span>: <span class="code-value">109.25</span>, <span class="code-key">"state"</span>: <span class="code-value">"CA"</span>}
-                            </div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-header">
-                                <div class="step-icon agent-icon">AI</div>
-                                <div class="step-title">Next invoice... same mistake</div>
-                            </div>
-                            <div class="step-description">Agent never learns</div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-header">
-                                <div class="step-icon operator-icon">😤</div>
-                                <div class="step-title">Operator fixes it AGAIN</div>
-                            </div>
-                            <div class="step-description">100+ manual fixes per day</div>
-                        </div>
+                <div class="day-label">Monday Afternoon</div>
+                <div class="workflow">
+                    <div class="workflow-step">
+                        <div class="step-icon">🤖</div>
+                        <div class="step-title">AI Agent</div>
+                        <div class="step-desc">Forgets CA tax AGAIN</div>
                     </div>
-                    
-                    <div class="after-panel">
-                        <div class="panel-label">✅ With AgentCorrect (Tomorrow)</div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-header">
-                                <div class="step-icon agent-icon">AI</div>
-                                <div class="step-title">Agent processes invoice</div>
-                            </div>
-                            <div class="step-description">California customer, $100 invoice</div>
-                            <div class="code-example">
-                                <span class="code-comment">// Agent makes mistake</span><br>
-                                {<span class="code-key">"amount"</span>: <span class="code-value">100</span>, <span class="code-key">"state"</span>: <span class="code-value">"CA"</span>}
-                            </div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-header">
-                                <div class="step-icon operator-icon">👤</div>
-                                <div class="step-title">Operator fixes it ONCE</div>
-                            </div>
-                            <div class="step-description">Adds CA tax one time</div>
-                            <div class="code-example">
-                                <span class="code-comment">// Fixed once</span><br>
-                                {<span class="code-key">"amount"</span>: <span class="code-value">109.25</span>, <span class="code-key">"state"</span>: <span class="code-value">"CA"</span>}
-                            </div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-header">
-                                <div class="step-icon learn-icon">🧠</div>
-                                <div class="step-title">AgentCorrect learns pattern</div>
-                            </div>
-                            <div class="step-description">Automatically captures the correction</div>
-                            <div class="code-example">
-                                <span class="code-comment">// Pattern learned</span><br>
-                                IF state="CA" THEN amount *= 1.0925
-                            </div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="step-header">
-                                <div class="step-icon auto-icon">✨</div>
-                                <div class="step-title">All future CA invoices auto-fixed</div>
-                            </div>
-                            <div class="step-description">Zero operator intervention forever</div>
-                            <div class="code-example">
-                                <span class="code-comment">// Auto-corrected by AgentCorrect</span><br>
-                                {<span class="code-key">"amount"</span>: <span class="code-added">109.25</span>, <span class="code-key">"state"</span>: <span class="code-value">"CA"</span>}
-                            </div>
-                        </div>
+                    <div class="arrow">→</div>
+                    <div class="workflow-step highlight-bad">
+                        <div class="step-icon">🤬</div>
+                        <div class="step-title">Operator</div>
+                        <div class="step-desc">Fixes it AGAIN</div>
+                    </div>
+                </div>
+                
+                <div class="day-label">Every Day Forever...</div>
+                <div class="workflow">
+                    <div class="workflow-step">
+                        <div class="step-icon">🤖</div>
+                        <div class="step-title">AI Agent</div>
+                        <div class="step-desc">Same mistakes</div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="workflow-step highlight-bad">
+                        <div class="step-icon">💀</div>
+                        <div class="step-title">Operator</div>
+                        <div class="step-desc">100+ fixes/day</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     
-    <section class="how-it-works" id="how-it-works">
+    <section class="stats">
         <div class="container">
-            <h2 class="section-title">How AgentCorrect Works</h2>
-            <p class="section-subtitle">Simple, automatic, and invisible to your workflow</p>
-            
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h3>Shadow Mode</h3>
-                    <p>AgentCorrect sits between your agent and your systems, observing all actions and corrections without interfering.</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">73%</div>
+                    <div class="stat-label">of operator time is repetitive fixes</div>
                 </div>
-                
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3>Learn Patterns</h3>
-                    <p>When operators fix mistakes, AgentCorrect automatically captures the before/after and learns the correction pattern.</p>
+                <div class="stat-card">
+                    <div class="stat-number">$47K</div>
+                    <div class="stat-label">average yearly cost per operator</div>
                 </div>
-                
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h3>Auto-Apply</h3>
-                    <p>Next time the same situation occurs, the correction is applied automatically. Operators never see the same mistake twice.</p>
+                <div class="stat-card">
+                    <div class="stat-number">8.3hr</div>
+                    <div class="stat-label">daily rework per team</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Zero</div>
+                    <div class="stat-label">rework with AgentCorrect</div>
                 </div>
             </div>
         </div>
     </section>
     
-    <section class="value-props">
+    <section class="how" id="solution">
         <div class="container">
-            <h2 class="section-title">Built for real production needs</h2>
-            <p class="section-subtitle">Not another monitoring tool - this actually fixes problems</p>
+            <div class="section-header">
+                <h2 class="section-title">How AgentCorrect works</h2>
+                <p class="section-subtitle">Three steps to zero rework</p>
+            </div>
             
-            <div class="props-grid">
-                <div class="prop-card">
-                    <div class="prop-icon">⚡</div>
-                    <div class="prop-content">
-                        <h3>Zero Code Changes</h3>
-                        <p>Works with any agent framework. LangChain, AutoGPT, custom - doesn't matter. One line to integrate, invisible to your agent.</p>
-                    </div>
+            <div class="how-grid">
+                <div class="how-card">
+                    <div class="how-number">1</div>
+                    <h3 class="how-title">Shadow</h3>
+                    <p class="how-desc">
+                        AgentCorrect sits between your agents and systems, 
+                        watching every action and correction without interfering.
+                    </p>
                 </div>
                 
-                <div class="prop-card">
-                    <div class="prop-icon">🎯</div>
-                    <div class="prop-content">
-                        <h3>Learns Your Business Logic</h3>
-                        <p>Every business is unique. AgentCorrect learns YOUR specific rules, YOUR edge cases, YOUR requirements from YOUR operators.</p>
-                    </div>
+                <div class="how-card">
+                    <div class="how-number">2</div>
+                    <h3 class="how-title">Learn</h3>
+                    <p class="how-desc">
+                        When operators fix mistakes, we automatically capture 
+                        the pattern and learn the correction rule.
+                    </p>
                 </div>
                 
-                <div class="prop-card">
-                    <div class="prop-icon">🛡️</div>
-                    <div class="prop-content">
-                        <h3>Safe by Default</h3>
-                        <p>Patterns require multiple confirmations before auto-applying. Bad patterns can be rolled back instantly. Full audit trail.</p>
-                    </div>
-                </div>
-                
-                <div class="prop-card">
-                    <div class="prop-icon">📈</div>
-                    <div class="prop-content">
-                        <h3>Gets Smarter Over Time</h3>
-                        <p>The more your operators work, the smarter AgentCorrect becomes. Eventually, most corrections happen automatically.</p>
-                    </div>
+                <div class="how-card">
+                    <div class="how-number">3</div>
+                    <h3 class="how-title">Apply</h3>
+                    <p class="how-desc">
+                        Next time the same situation occurs, the correction 
+                        is applied automatically. Forever.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
     
-    <section class="integration" id="integration">
+    <section class="code-section">
         <div class="container">
-            <h2 class="section-title">Integration in 30 seconds</h2>
-            <p class="section-subtitle">Seriously, it's that simple</p>
-            
-            <div class="code-block">
-                <span class="code-comment"># Install AgentCorrect</span><br>
-                pip install agentcorrect<br><br>
-                
-                <span class="code-comment"># Add one line to your agent code</span><br>
-                from agentcorrect import AgentCorrect<br>
-                ac = AgentCorrect()<br><br>
-                
-                <span class="code-comment"># Wrap your agent actions</span><br>
-                action = agent.decide_action()<br>
-                action = <span class="code-added">ac.intercept(action)</span>  <span class="code-comment"># That's it!</span><br>
-                execute(action)
+            <div class="section-header">
+                <h2 class="section-title">One line integration</h2>
+                <p class="section-subtitle">Works with any agent framework</p>
             </div>
             
-            <div class="framework-badges">
-                <div class="framework-badge">LangChain</div>
-                <div class="framework-badge">AutoGPT</div>
-                <div class="framework-badge">CrewAI</div>
-                <div class="framework-badge">OpenAI</div>
-                <div class="framework-badge">Anthropic</div>
-                <div class="framework-badge">Custom Agents</div>
+            <div class="code-container">
+                <pre class="code"><span class="code-comment"># Install AgentCorrect</span>
+$ pip install agentcorrect
+
+<span class="code-comment"># Add to your agent (literally one line)</span>
+<span class="code-keyword">from</span> <span class="code-string">agentcorrect</span> <span class="code-keyword">import</span> AgentCorrect
+
+ac = <span class="code-function">AgentCorrect</span>()
+action = agent.decide_action()
+action = ac.<span class="code-function">intercept</span>(action)  <span class="code-comment"># ← That's it</span>
+execute(action)</pre>
             </div>
         </div>
     </section>
     
-    <section class="cta-section" id="get-started">
+    <section class="pricing" id="pricing">
         <div class="container">
-            <h2>Stop fixing the same mistakes</h2>
-            <p>Your operators deserve better than repetitive work</p>
+            <div class="section-header">
+                <h2 class="section-title">Simple pricing</h2>
+                <p class="section-subtitle">Start free. Scale as you grow.</p>
+            </div>
             
-            <div class="cta-buttons">
-                <a href="https://github.com/ishaan1345/agentcorrect" class="cta-primary">Get Started Free</a>
-                <a href="mailto:founders@agentcorrect.ai" class="cta-secondary">Book a Demo</a>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Starter</div>
+                    <div class="pricing-price">$0</div>
+                    <div class="pricing-period">forever</div>
+                    <ul class="pricing-features">
+                        <li>Up to 1,000 corrections/mo</li>
+                        <li>Basic patterns</li>
+                        <li>Community support</li>
+                        <li>Single agent</li>
+                    </ul>
+                    <a href="#" class="btn-secondary" style="width: 100%;">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-tier">Team</div>
+                    <div class="pricing-price">$199</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited corrections</li>
+                        <li>Advanced pattern learning</li>
+                        <li>Priority support</li>
+                        <li>Unlimited agents</li>
+                        <li>Pattern analytics</li>
+                    </ul>
+                    <a href="#" class="btn-primary" style="width: 100%;">Start Free Trial</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">contact sales</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Team</li>
+                        <li>On-premise deployment</li>
+                        <li>SLA guarantees</li>
+                        <li>Custom integrations</li>
+                        <li>Dedicated support</li>
+                    </ul>
+                    <a href="#" class="btn-secondary" style="width: 100%;">Contact Sales</a>
+                </div>
             </div>
         </div>
     </section>
@@ -838,41 +749,15 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">AgentCorrect</div>
+                <div class="logo">AgentCorrect</div>
                 <div class="footer-links">
                     <a href="https://github.com/ishaan1345/agentcorrect">GitHub</a>
-                    <a href="https://docs.agentcorrect.ai">Documentation</a>
-                    <a href="mailto:founders@agentcorrect.ai">Contact</a>
-                    <a href="https://twitter.com/agentcorrect">Twitter</a>
+                    <a href="#">Documentation</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contact</a>
                 </div>
             </div>
         </div>
     </footer>
-    
-    <script>
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    </script>
 </body>
 </html>
