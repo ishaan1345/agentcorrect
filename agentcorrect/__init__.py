@@ -1,14 +1,40 @@
 """
-AgentCorrect - CI/CD guardrails for AI agents
-
-Stop payment duplicates, data deletions, and infrastructure wipes before production.
+AgentCorrect - Autocorrect for AI Agents
+Simple, automatic fixes for common AI agent mistakes
 """
 
-__version__ = "0.1.0"
-__author__ = "AgentCorrect Team"
-__email__ = "support@agentcorrect.com"
-__license__ = "MIT"
+from .core import AgentCorrect, autocorrect, Correction
+from .integrations import (
+    protect_agent,
+    LangChainCorrector, 
+    OpenAIFunctionCorrector,
+    autocorrect_action
+)
 
-from .detectors import AgentCorrectV4
+__version__ = "1.0.0"
+__all__ = [
+    "AgentCorrect",
+    "autocorrect", 
+    "protect_agent",
+    "LangChainCorrector",
+    "OpenAIFunctionCorrector", 
+    "autocorrect_action",
+    "Correction"
+]
 
-__all__ = ["AgentCorrectV4", "__version__"]
+# Quick start
+def fix(action):
+    """
+    Quick fix for any AI agent action
+    
+    Example:
+        import agentcorrect
+        
+        # Automatically adds auth headers, idempotency keys, etc.
+        fixed = agentcorrect.fix({
+            "url": "https://api.stripe.com/v1/charges",
+            "method": "POST",
+            "body": {"amount": 5000}
+        })
+    """
+    return autocorrect(action)
