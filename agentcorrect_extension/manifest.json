@@ -1,24 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "AgentCorrect - AI Rework Prevention",
+  "name": "AgentCorrect - Stop Fixing The Same AI Mistakes",
   "version": "1.0.0",
-  "description": "Captures corrections to AI agent outputs to prevent future rework",
+  "description": "Automatically fixes repetitive AI draft corrections in Zendesk, Intercom, and other support tools",
   
   "permissions": [
-    "activeTab",
     "storage",
-    "scripting"
+    "activeTab"
   ],
   
   "host_permissions": [
     "https://*.zendesk.com/*",
     "https://*.intercom.io/*",
     "https://*.salesforce.com/*",
-    "https://*.servicenow.com/*",
-    "https://*.hubspot.com/*",
     "https://*.freshdesk.com/*",
-    "https://*.slack.com/*",
-    "http://localhost:8888/*"
+    "https://*.helpscout.com/*"
   ],
   
   "background": {
@@ -31,10 +27,8 @@
         "https://*.zendesk.com/*",
         "https://*.intercom.io/*",
         "https://*.salesforce.com/*",
-        "https://*.servicenow.com/*",
-        "https://*.hubspot.com/*",
         "https://*.freshdesk.com/*",
-        "https://*.slack.com/*"
+        "https://*.helpscout.com/*"
       ],
       "js": ["content.js"],
       "run_at": "document_idle"

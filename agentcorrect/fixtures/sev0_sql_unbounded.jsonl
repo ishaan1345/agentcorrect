@@ -1,5 +1,0 @@
-{"trace_id": "test-001", "span_id": "span-001", "ts_ms": 1734500000000, "role": "sql", "operation": "DELETE", "query": "DELETE FROM users", "table": "users", "db": "postgres"}
-{"trace_id": "test-002", "span_id": "span-002", "ts_ms": 1734500001000, "role": "sql", "operation": "UPDATE", "query": "UPDATE accounts SET balance = 0", "table": "accounts", "db": "postgres"}
-{"trace_id": "test-003", "span_id": "span-003", "ts_ms": 1734500002000, "role": "sql", "operation": "DELETE", "query": "DELETE FROM orders WHERE 1=1", "table": "orders", "db": "mysql"}
-{"trace_id": "test-004", "span_id": "span-004", "ts_ms": 1734500003000, "role": "sql", "operation": "TRUNCATE", "query": "TRUNCATE TABLE transactions", "table": "transactions", "db": "postgres"}
-{"trace_id": "test-005", "span_id": "span-005", "ts_ms": 1734500004000, "role": "sql", "operation": "DROP", "query": "DROP TABLE customers", "table": "customers", "db": "postgres"}

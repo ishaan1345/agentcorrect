@@ -1,1 +1,0 @@
-{"span_id":"s4","trace_id":"t4","ts_ms":4,"role":"http","op":"POST","meta":{"http":{"method":"POST","url":"https://api.stripe.com/v1/charges","headers":{"Idempotency-Key":"abcd-123"}}}}

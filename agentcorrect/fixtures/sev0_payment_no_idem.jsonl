@@ -1,1 +1,0 @@
-{"span_id":"s2","trace_id":"t2","ts_ms":2,"role":"http","op":"POST","meta":{"http":{"method":"POST","url":"https://api.stripe.com/v1/charges","headers":{"Authorization":"Bearer sk_test_x"}}}}

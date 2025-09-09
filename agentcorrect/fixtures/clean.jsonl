@@ -1,2 +1,0 @@
-{"span_id":"s5","trace_id":"t5","ts_ms":5,"role":"http","op":"GET","meta":{"http":{"method":"GET","url":"https://api.example.com/users","headers":{}}}}
-{"span_id":"s6","trace_id":"t6","ts_ms":6,"role":"sql","op":"UPDATE","meta":{"sql":{"final":"UPDATE users SET last_login = NOW() WHERE id = 42"}}}

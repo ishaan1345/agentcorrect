@@ -1,1 +1,0 @@
-{"span_id":"s1","trace_id":"t1","ts_ms":1,"role":"sql","op":"DELETE","meta":{"sql":{"final":"DELETE FROM users;"}}}
