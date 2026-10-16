@@ -128,6 +128,38 @@ The deterministic path makes no network calls. Any async implementation of
 `Classifier.score(action, context, rules) -> {rule_id: probability}` can be used:
 local models, another vendor, or your own policy service.
 
+For a local non-generative open-weight decision model, use **Laya** (optional,
+Python 3.10+). Install `laya` separately, choosing the PyTorch build appropriate for
+your CPU/GPU. Load the checkpoint once before serving requests:
+
+```python
+import laya
+from agentcorrect.runtime import LayaClassifier
+
+agent = laya.load("convaiinnovations/laya-typed-decisions", device="cpu")
+classifier = LayaClassifier(agent)
+gate = Gate(policy, tools, classifier=classifier, timeout=10)
+```
+
+Weights download on the first load; inference runs locally with no paid API key.
+This is a typed yes/no decision model, with no generated JSON to parse. The adapter
+checks every answer, rejects potentially truncated policy/context and concurrent
+inference, and stops execution on inference errors. A timeout stops tool execution,
+but cannot cancel an already-running native inference call. Probabilities still
+require evaluation and calibration on your own rules; high confidence is not proof
+of correctness. Laya is not a financial authorization or idempotency system.
+
+Run the actual model against the frozen synthetic transaction/privacy cases:
+
+```sh
+python examples/local_classifier_qa.py --out local-classifier-evidence.json
+```
+
+The runner records every expected/actual decision, tool side effect, and latency,
+including unsafe allows and false blocks. It is a small smoke evaluation, not a
+production safety benchmark. The question prefix is `RULE_PREFIX` in
+[laya.py](agentcorrect/runtime/laya.py). No real money or financial APIs are used.
+
 An optional Jev adapter uses OpenRouter's Decisions API:
 
 ```python

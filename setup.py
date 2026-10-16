@@ -5,7 +5,7 @@ import os
 
 # Read version from __init__.py
 here = os.path.abspath(os.path.dirname(__file__))
-version = "0.2.0a1"  # Default version
+version = "0.2.0a2"  # Default version
 try:
     with open(os.path.join(here, 'agentcorrect', '__init__.py'), 'r') as f:
         for line in f:

@@ -2,6 +2,7 @@
 from .core import Action, Blocked, Classifier, Decision, Gate, Policy, Rule
 from .adapters import feedback, normalize
 from .jev import JevClassifier
+from .laya import LayaClassifier
 
 __all__ = ['Action', 'Blocked', 'Classifier', 'Decision', 'Gate', 'Policy', 'Rule',
-           'JevClassifier', 'feedback', 'normalize']
+           'JevClassifier', 'LayaClassifier', 'feedback', 'normalize']
