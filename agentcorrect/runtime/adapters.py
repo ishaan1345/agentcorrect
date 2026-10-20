@@ -42,6 +42,8 @@ def normalize(provider: str, call: dict, *, call_id=None) -> Action:
             return Action(call['id'], call['name'], call['input'])
         if provider == 'gemini':
             function = call['functionCall']
+            if not isinstance(function, dict):
+                raise ValueError('Malformed tool call')
             return Action(function.get('id') or call_id, function['name'], function.get('args', {}))
         if provider == 'mcp':
             if call.get('method') != 'tools/call':

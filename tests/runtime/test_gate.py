@@ -234,6 +234,16 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(ValueError):
             normalize('openai_responses', {'type': 'function_call', 'status': 'in_progress', 'call_id': '1', 'name': 'write', 'arguments': '{}'})
 
+    def test_malformed_nested_provider_envelopes_are_value_errors(self):
+        for provider, call in [
+            ('gemini', {'functionCall': 'not-an-object'}),
+            ('gemini', {'functionCall': None}),
+            ('mcp', {'method': 'tools/call', 'id': 1, 'params': 'not-an-object'}),
+            ('openai_chat', {'type': 'function', 'id': '1', 'function': 'not-an-object'}),
+        ]:
+            with self.assertRaises(ValueError):
+                normalize(provider, call)
+
     def test_invalid_policy_fails_at_construction(self):
         with self.assertRaises(ValueError):
             Policy((Rule('x', 'hard_deny', ('*',)), Rule('y', 'allow', ('*',), clears=('x',))))
