@@ -5,7 +5,7 @@ import os
 
 # Read version from __init__.py
 here = os.path.abspath(os.path.dirname(__file__))
-version = "0.1.0"  # Default version
+version = "0.2.0a2"  # Default version
 try:
     with open(os.path.join(here, 'agentcorrect', '__init__.py'), 'r') as f:
         for line in f:
@@ -23,18 +23,18 @@ setup(
     version=version,
     author="AgentCorrect Team",
     author_email="support@agentcorrect.com",
-    description="CI/CD guardrails for AI agents - prevent payment duplicates and data destruction",
+    description="Provider-agnostic execution guard for AI agent tool calls",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/agentcorrect",
+    url="https://github.com/ishaan1345/agentcorrect",
     project_urls={
-        "Bug Tracker": "https://github.com/yourusername/agentcorrect/issues",
-        "Documentation": "https://docs.agentcorrect.com",
-        "Source Code": "https://github.com/yourusername/agentcorrect",
+        "Bug Tracker": "https://github.com/ishaan1345/agentcorrect/issues",
+        "Documentation": "https://github.com/ishaan1345/agentcorrect#readme",
+        "Source Code": "https://github.com/ishaan1345/agentcorrect",
     },
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Quality Assurance",
         "Topic :: Software Development :: Testing",

@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agentcorrect"
-version = "0.1.0"
-description = "CI/CD guardrails for AI agents - prevent payment duplicates and data destruction"
+version = "0.2.0a2"
+description = "Provider-agnostic execution guard for AI agent tool calls"
 readme = "README.md"
 authors = [
     {name = "AgentCorrect Team", email = "support@agentcorrect.com"}
 ]
 license = {text = "MIT"}
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Quality Assurance",
     "Topic :: Software Development :: Testing",
@@ -33,10 +33,10 @@ dependencies = [
 requires-python = ">=3.8"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/agentcorrect"
-Documentation = "https://docs.agentcorrect.com"
-Repository = "https://github.com/yourusername/agentcorrect"
-Issues = "https://github.com/yourusername/agentcorrect/issues"
+Homepage = "https://github.com/ishaan1345/agentcorrect"
+Documentation = "https://github.com/ishaan1345/agentcorrect#readme"
+Repository = "https://github.com/ishaan1345/agentcorrect"
+Issues = "https://github.com/ishaan1345/agentcorrect/issues"
 
 [project.scripts]
 agentcorrect = "agentcorrect.cli:main"
@@ -51,7 +51,7 @@ dev = [
 ]
 
 [tool.setuptools]
-packages = ["agentcorrect"]
+packages = ["agentcorrect", "agentcorrect.runtime"]
 include-package-data = true
 
 [tool.setuptools.package-data]
